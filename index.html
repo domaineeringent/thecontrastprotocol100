@@ -1,0 +1,2125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Contrast Protocol - The Definitive Directory & Guide</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap"></noscript>
+
+    <style>
+        /* -------------------------------------------------------------------------- */
+        /*                                 RESET & CORE SETUP                         */
+        /* -------------------------------------------------------------------------- */
+        :root {
+            --color-primary: #0D1B2A;
+            --color-secondary: #1B263B;
+            --color-accent: #FF6B00;
+            --color-accent-dark: #e05e00;
+            --color-light: #E0E1DD;
+            --color-white: #FFFFFF;
+            --color-text: #B0B5BF;
+            --color-text-strong: #F0F2F5;
+            --color-success: #28a745;
+            --font-family-heading: 'Montserrat', sans-serif;
+            --font-family-body: 'Lora', serif;
+            --header-height: 80px; /* Default, will be updated by JS */
+            --base-content-padding: 4rem;
+            --container-width: 1240px;
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 8px 16px rgba(0,0,0,0.2);
+            --shadow-lg: 0 15px 30px rgba(0,0,0,0.3);
+            --transition-fast: 0.2s ease-in-out;
+            --transition-med: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--color-primary);
+            color: var(--color-text);
+            font-family: var(--font-family-body);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /*                             LAW I.A.1 & Z.1 ARCHITECTURE                   */
+        /* -------------------------------------------------------------------------- */
+        #app-shell {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #view-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .view {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            overflow-y: auto;
+            overflow-x: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity var(--transition-med), visibility var(--transition-med);
+            padding-top: calc(var(--header-height) + var(--base-content-padding));
+        }
+
+        .view.is-active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* LAW VII - Flexbox Sticky Footer */
+        .main-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100%;
+        }
+
+        .view-section {
+            flex-grow: 1;
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /*                                     HEADER                                 */
+        /* -------------------------------------------------------------------------- */
+        #main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color var(--transition-med), box-shadow var(--transition-med), padding var(--transition-med);
+        }
+
+        #main-header.is-scrolled {
+            background-color: rgba(13, 27, 42, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-md);
+            padding: 1rem 2rem;
+        }
+
+        .logo-container {
+            font-family: var(--font-family-heading);
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--color-white);
+            text-decoration: none;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+        .logo-container span {
+            color: var(--color-accent);
+        }
+
+        .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .main-nav a {
+            color: var(--color-light);
+            text-decoration: none;
+            font-family: var(--font-family-heading);
+            font-weight: 600;
+            font-size: 0.9rem;
+            position: relative;
+            transition: color var(--transition-fast);
+            padding: 0.5rem 0;
+            cursor: pointer;
+        }
+
+        .main-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--color-accent);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform var(--transition-med);
+        }
+
+        .main-nav a:hover,
+        .main-nav a.active {
+            color: var(--color-white);
+        }
+
+        .main-nav a:hover::after,
+        .main-nav a.active::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /*                                  COMPONENTS                                */
+        /* -------------------------------------------------------------------------- */
+        .container {
+            width: 100%;
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            font-family: var(--font-family-heading);
+            font-weight: 700;
+            transition: all var(--transition-fast);
+            border: 2px solid transparent;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn--primary {
+            background-color: var(--color-accent);
+            color: var(--color-white);
+        }
+
+        .btn--primary:hover {
+            background-color: var(--color-accent-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn--secondary {
+            background-color: transparent;
+            color: var(--color-light);
+            border-color: var(--color-light);
+        }
+
+        .btn--secondary:hover {
+            background-color: var(--color-light);
+            color: var(--color-primary);
+        }
+
+        .btn--outline {
+            background-color: transparent;
+            color: var(--color-accent);
+            border-color: var(--color-accent);
+        }
+        .btn--outline:hover {
+            background-color: var(--color-accent);
+            color: var(--color-white);
+        }
+
+        .section-heading {
+            font-family: var(--font-family-heading);
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: var(--color-text-strong);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .section-subheading {
+            font-size: 1.2rem;
+            color: var(--color-text);
+            max-width: 700px;
+            margin: 0 auto 3rem auto;
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        .check-list {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 2rem;
+        }
+        .check-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .check-list svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--color-accent);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        /* -------------------------------------------------------------------------- */
+        /*                                  HOME VIEW                                 */
+        /* -------------------------------------------------------------------------- */
+        .hero-section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            padding: 0 2rem;
+            overflow: hidden;
+        }
+        
+        /* LAW I.A.1-EPSILON: SEAMLESS BACKGROUND */
+        .view > .main-content-wrapper > .hero-section {
+            margin-top: calc(-1 * var(--base-content-padding));
+            padding-top: calc(var(--header-height) + var(--base-content-padding)); /* Compensatory padding */
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(13, 27, 42, 0.7) 0%, rgba(13, 27, 42, 1) 95%);
+            z-index: 2;
+        }
+        
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            animation: ken-burns 25s ease-out infinite;
+        }
+        
+        @keyframes ken-burns {
+            0% { transform: scale(1.1) rotate(0.1deg); }
+            50% { transform: scale(1) rotate(0deg); }
+            100% { transform: scale(1.1) rotate(0.1deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            max-width: 900px;
+        }
+        
+        .hero-content h1 {
+            font-family: var(--font-family-heading);
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            color: var(--color-white);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        
+        .hero-content h1 span {
+            color: var(--color-accent);
+        }
+        
+        .hero-content p {
+            font-size: 1.3rem;
+            color: var(--color-light);
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-cta-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .featured-locations {
+            padding: 6rem 0;
+            background-color: var(--color-primary);
+        }
+        
+        .locations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+        
+        /* Location Card Component */
+        .location-card {
+            background-color: var(--color-secondary);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: transform var(--transition-med), box-shadow var(--transition-med);
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+        
+        .location-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .location-card__image-wrapper {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+        
+        .location-card__image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        
+        .location-card:hover .location-card__image {
+            transform: scale(1.05);
+        }
+        
+        .location-card__premium-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: var(--color-accent);
+            color: var(--color-white);
+            padding: 0.3rem 0.8rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            font-family: var(--font-family-heading);
+            border-radius: var(--radius-sm);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .location-card__content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .location-card__title {
+            font-family: var(--font-family-heading);
+            font-size: 1.4rem;
+            color: var(--color-text-strong);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .location-card__address {
+            color: var(--color-text);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .location-card__address svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--color-accent);
+            flex-shrink: 0;
+        }
+        
+        .location-card__rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--color-accent);
+        }
+
+        .location-card__rating span {
+            color: var(--color-text);
+            font-size: 0.9rem;
+        }
+
+        .location-card__rating .stars { display: flex; gap: 0.2rem; }
+        .location-card__rating svg { width: 18px; height: 18px; fill: currentColor; }
+        
+        .location-card__cta {
+            margin-top: auto;
+            text-align: center;
+        }
+        
+        .guide-promo-section {
+            padding: 6rem 0;
+            background-color: var(--color-secondary);
+        }
+        
+        .guide-promo-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .guide-promo-image-wrapper {
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .guide-promo-image-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .guide-promo-text h2 {
+            font-family: var(--font-family-heading);
+            font-size: 2.5rem;
+            color: var(--color-text-strong);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        
+        .guide-promo-text p {
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        
+        /* -------------------------------------------------------------------------- */
+        /*                          LAW I.A.1-EPSILON GENERAL RULE                    */
+        /* -------------------------------------------------------------------------- */
+        
+        /* This rule targets any view where the first section is a page header */
+        .view > .main-content-wrapper > .page-header-section:first-child {
+            margin-top: calc(-1 * var(--base-content-padding));
+            padding-top: calc(var(--base-content-padding)); /* Compensatory */
+        }
+
+        .page-header-section {
+            padding-bottom: 4rem;
+            background: linear-gradient(rgba(13, 27, 42, 0.2), var(--color-primary)), var(--color-secondary);
+        }
+        
+        /* -------------------------------------------------------------------------- */
+        /*                                LOCATIONS VIEW                              */
+        /* -------------------------------------------------------------------------- */
+        .search-filter-bar {
+            background-color: var(--color-secondary);
+            padding: 2rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        
+        .search-input-group {
+            flex-grow: 1;
+            position: relative;
+        }
+        
+        .search-input-group svg {
+            position: absolute;
+            left: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            fill: var(--color-text);
+        }
+        
+        .search-input-group input, .search-filter-bar select {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3.5rem;
+            background-color: var(--color-primary);
+            border: 1px solid var(--color-secondary);
+            border-radius: var(--radius-sm);
+            color: var(--color-light);
+            font-family: var(--font-family-body);
+            font-size: 1rem;
+        }
+
+        .search-filter-bar select {
+             padding: 1rem;
+             -webkit-appearance: none;
+             appearance: none;
+             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23B0B5BF' class='bi bi-chevron-down' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+             background-repeat: no-repeat;
+             background-position: right 1rem center;
+        }
+
+        .locations-results-section {
+            padding: 4rem 0 6rem 0;
+        }
+
+        .locations-results-header {
+            margin-bottom: 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .locations-results-header h2 {
+            font-family: var(--font-family-heading);
+            font-weight: 700;
+            color: var(--color-text-strong);
+            font-size: 1.5rem;
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /*                             LOCATION DETAIL VIEW                           */
+        /* -------------------------------------------------------------------------- */
+        .location-detail-header {
+            height: 60vh;
+            position: relative;
+            color: var(--color-white);
+            display: flex;
+            align-items: flex-end;
+            padding: 4rem;
+        }
+
+        .location-detail-header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(13, 27, 42, 1) 0%, rgba(13, 27, 42, 0.8) 50%, rgba(13, 27, 42, 0) 100%);
+            z-index: 2;
+        }
+
+        .location-detail-header__background {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .location-detail-header__content {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+            max-width: var(--container-width);
+            margin: 0 auto;
+        }
+
+        .location-detail-header__content h1 {
+            font-family: var(--font-family-heading);
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 3px 10px rgba(0,0,0,0.5);
+        }
+
+        .location-detail-main {
+            padding: 4rem 0 6rem;
+        }
+        .location-detail-layout {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 4rem;
+            align-items: flex-start;
+        }
+        .location-detail-sidebar {
+            position: sticky;
+            top: calc(var(--header-height) + 2rem);
+            background: var(--color-secondary);
+            padding: 2rem;
+            border-radius: var(--radius-md);
+        }
+        .sidebar-info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .sidebar-info-item svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--color-accent);
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+        .sidebar-info-item p {
+            margin: 0;
+            line-height: 1.5;
+        }
+        .sidebar-info-item strong {
+            color: var(--color-text-strong);
+            display: block;
+        }
+        .sidebar-cta-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .location-detail-content h2 {
+            font-family: var(--font-family-heading);
+            font-size: 2.2rem;
+            color: var(--color-text-strong);
+            font-weight: 700;
+            margin: 2rem 0 1.5rem 0;
+            border-bottom: 2px solid var(--color-secondary);
+            padding-bottom: 0.5rem;
+        }
+        .location-detail-content h2:first-child {
+            margin-top: 0;
+        }
+
+        .amenities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        .amenity-item {
+            background: var(--color-secondary);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+        .amenity-item svg {
+            width: 40px;
+            height: 40px;
+            fill: var(--color-accent);
+            margin-bottom: 1rem;
+        }
+        .amenity-item p {
+            font-family: var(--font-family-heading);
+            font-weight: 600;
+            color: var(--color-text-strong);
+            margin: 0;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        .gallery-grid img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: var(--radius-md);
+        }
+        
+        /* -------------------------------------------------------------------------- */
+        /*                                GUIDES VIEW                                 */
+        /* -------------------------------------------------------------------------- */
+        .guides-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .guide-card {
+            background-color: var(--color-secondary);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: transform var(--transition-med), box-shadow var(--transition-med);
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .guide-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .guide-card__image-wrapper {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .guide-card__image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        
+        .guide-card:hover .guide-card__image {
+            transform: scale(1.05);
+        }
+
+        .guide-card__content {
+            padding: 1.5rem;
+            flex-grow: 1;
+        }
+        .guide-card__title {
+            font-family: var(--font-family-heading);
+            font-size: 1.4rem;
+            color: var(--color-text-strong);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+        .guide-card__excerpt {
+            color: var(--color-text);
+            margin-bottom: 1.5rem;
+        }
+        .guide-card__meta {
+            color: var(--color-accent);
+            font-family: var(--font-family-heading);
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+        
+        /* -------------------------------------------------------------------------- */
+        /*                            GUIDE & ARTICLE DETAIL LAYOUT                   */
+        /* -------------------------------------------------------------------------- */
+        .guide-content-section, .article-body-section {
+            padding: 2rem 0 6rem 0;
+        }
+        
+        .guide-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 4rem;
+            align-items: flex-start;
+        }
+
+        .guide-toc, .article-toc {
+            position: sticky;
+            top: calc(var(--header-height) + 2rem);
+        }
+
+        .toc-title {
+            font-family: var(--font-family-heading);
+            font-weight: 700;
+            color: var(--color-text-strong);
+            margin-bottom: 1rem;
+        }
+        
+        .toc-list {
+            list-style: none;
+            padding-left: 0;
+            border-left: 2px solid var(--color-secondary);
+        }
+        
+        .toc-list li a {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: var(--color-text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all var(--transition-fast);
+        }
+        
+        .toc-list li a:hover {
+            color: var(--color-white);
+            background-color: var(--color-secondary);
+        }
+
+        .toc-list li a.active {
+            color: var(--color-accent);
+            border-left: 2px solid var(--color-accent);
+            margin-left: -2px;
+            font-weight: 600;
+        }
+
+        .guide-article-content h2,
+        .article-body-content h2 {
+            font-family: var(--font-family-heading);
+            font-size: 2.2rem;
+            color: var(--color-text-strong);
+            font-weight: 700;
+            margin: 3rem 0 1.5rem 0;
+            border-bottom: 2px solid var(--color-secondary);
+            padding-bottom: 0.5rem;
+        }
+        
+        .guide-article-content h3,
+        .article-body-content h3 {
+            font-family: var(--font-family-heading);
+            font-size: 1.5rem;
+            color: var(--color-text-strong);
+            font-weight: 600;
+            margin: 2rem 0 1rem 0;
+        }
+        
+        .guide-article-content p,
+        .article-body-content p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .guide-article-content blockquote,
+        .article-body-content blockquote {
+            border-left: 4px solid var(--color-accent);
+            margin: 2rem 0;
+            padding: 1rem 2rem;
+            background-color: var(--color-secondary);
+            font-style: italic;
+            font-size: 1.2rem;
+            color: var(--color-light);
+        }
+        
+        .guide-article-content img,
+        .article-body-content img {
+            width: 100%;
+            height: auto;
+            border-radius: var(--radius-md);
+            margin: 2rem 0;
+        }
+        
+        /* -------------------------------------------------------------------------- */
+        /*                                ARTICLES VIEW                               */
+        /* -------------------------------------------------------------------------- */
+        .articles-content-section {
+            padding: 4rem 0 6rem 0;
+        }
+        
+        .articles-layout {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 4rem;
+            align-items: flex-start;
+        }
+
+        /* Article Card Component */
+        .article-card {
+            background: var(--color-secondary);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            margin-bottom: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            transition: transform var(--transition-med);
+            cursor: pointer;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .article-card__image-wrapper {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .article-card__image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .article-card:hover .article-card__image {
+            transform: scale(1.05);
+        }
+
+        .article-card__content {
+            padding: 1.5rem;
+        }
+
+        .article-card__category {
+            font-family: var(--font-family-heading);
+            font-weight: 700;
+            color: var(--color-accent);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .article-card__title {
+            font-family: var(--font-family-heading);
+            font-size: 1.4rem;
+            color: var(--color-text-strong);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            text-decoration: none;
+            line-height: 1.3;
+        }
+
+        .article-card:hover .article-card__title {
+            color: var(--color-accent);
+        }
+        
+        .article-card__excerpt {
+            color: var(--color-text);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .article-card__meta {
+            font-size: 0.9rem;
+            color: var(--color-text);
+        }
+        
+        .articles-sidebar {
+            position: sticky;
+            top: calc(var(--header-height) + 2rem);
+        }
+
+        .sidebar-widget {
+            background-color: var(--color-secondary);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 2rem;
+        }
+        
+        .sidebar-widget__title {
+            font-family: var(--font-family-heading);
+            font-weight: 700;
+            color: var(--color-text-strong);
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--color-primary);
+            padding-bottom: 0.5rem;
+        }
+        
+        .sidebar-widget ul {
+            list-style: none;
+        }
+        
+        .sidebar-widget ul li a {
+            color: var(--color-text);
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem 0;
+            transition: color var(--transition-fast);
+        }
+
+        .sidebar-widget ul li a:hover {
+            color: var(--color-accent);
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /*                              ARTICLE DETAIL VIEW                           */
+        /* -------------------------------------------------------------------------- */
+        .article-header-section {
+             height: 50vh;
+             position: relative;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             text-align: center;
+             color: var(--color-white);
+        }
+        
+        .view > .main-content-wrapper > .article-header-section:first-child {
+            margin-top: calc(-1 * var(--base-content-padding));
+            padding-top: var(--base-content-padding);
+        }
+
+        .article-header-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(13, 27, 42, 0.8), rgba(13, 27, 42, 0.8));
+            z-index: 2;
+        }
+
+        .article-header-background {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+        
+        .article-header-content {
+            position: relative;
+            z-index: 3;
+            max-width: 900px;
+            padding: 0 2rem;
+        }
+        
+        .article-header-content .article-card__category {
+            font-size: 1rem;
+        }
+        
+        .article-header-content h1 {
+            font-family: var(--font-family-heading);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .article-meta {
+            color: var(--color-light);
+            font-size: 0.9rem;
+        }
+        
+        .article-body-section {
+             background-color: var(--color-primary);
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /*                             FOR BUSINESS / CONTACT                         */
+        /* -------------------------------------------------------------------------- */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+            margin-top: 4rem;
+        }
+
+        .pricing-card {
+            background: var(--color-secondary);
+            padding: 2.5rem;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--color-secondary);
+            transition: all var(--transition-med);
+        }
+        
+        .pricing-card--featured {
+            transform: scale(1.05);
+            border-color: var(--color-accent);
+            box-shadow: 0 0 30px rgba(255, 107, 0, 0.3);
+        }
+
+        .pricing-card__title {
+            font-family: var(--font-family-heading);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-text-strong);
+        }
+
+        .pricing-card__price {
+            font-size: 3rem;
+            font-weight: 800;
+            font-family: var(--font-family-heading);
+            color: var(--color-white);
+            margin: 1rem 0;
+        }
+
+        .pricing-card__price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--color-text);
+        }
+
+        .pricing-card ul { margin: 2rem 0; }
+        
+        .contact-form-container {
+            max-width: 800px;
+            margin: 4rem auto 0 auto;
+            background: var(--color-secondary);
+            padding: 3rem;
+            border-radius: var(--radius-md);
+        }
+
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label {
+            display: block;
+            margin-bottom: .5rem;
+            font-family: var(--font-family-heading);
+            font-weight: 600;
+            color: var(--color-light);
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 1rem;
+            background: var(--color-primary);
+            border: 1px solid #2a3b52;
+            border-radius: var(--radius-sm);
+            color: var(--color-light);
+            font-family: var(--font-family-body);
+            font-size: 1rem;
+        }
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /*                                   FOOTER                                   */
+        /* -------------------------------------------------------------------------- */
+        .site-footer {
+            background-color: var(--color-secondary);
+            padding: 4rem 0;
+            color: var(--color-text);
+            flex-shrink: 0; /* LAW VII */
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-column__title {
+            font-family: var(--font-family-heading);
+            color: var(--color-text-strong);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li a {
+            color: var(--color-text);
+            text-decoration: none;
+            padding: 0.4rem 0;
+            display: block;
+            transition: color var(--transition-fast);
+            cursor: pointer;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--color-accent);
+        }
+        
+        .footer-about p {
+            margin-bottom: 1rem;
+        }
+
+        .footer-social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .footer-social-links a {
+            color: var(--color-light);
+            transition: color var(--transition-fast);
+        }
+        .footer-social-links a:hover { color: var(--color-accent); }
+        .footer-social-links svg { width: 24px; height: 24px; }
+        
+        .footer-bottom {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-primary);
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /*                              RESPONSIVE DESIGN                             */
+        /* -------------------------------------------------------------------------- */
+        @media (max-width: 992px) {
+            .main-nav { display: none; /* Mobile menu would be implemented here */ }
+            .guide-layout, .articles-layout, .location-detail-layout { grid-template-columns: 1fr; }
+            .guide-toc, .article-toc, .articles-sidebar, .location-detail-sidebar { position: static; margin-bottom: 3rem; }
+            .pricing-grid { grid-template-columns: 1fr; }
+            .pricing-card--featured { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            :root { --base-content-padding: 2rem; }
+            .hero-content h1 { font-size: clamp(2.5rem, 10vw, 3.5rem); }
+            .hero-cta-group { flex-direction: column; }
+            .guide-promo-content { grid-template-columns: 1fr; }
+            .search-filter-bar { flex-direction: column; align-items: stretch; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .location-detail-header { padding: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div id="app-shell">
+        <header id="main-header">
+            <a class="logo-container nav-link" data-view="home">Contrast<span>Protocol</span></a>
+            <nav class="main-nav">
+                <a class="nav-link active" data-view="home">Home</a>
+                <a class="nav-link" data-view="locations">Locations</a>
+                <a class="nav-link" data-view="guides">Guides</a>
+                <a class="nav-link" data-view="articles">Articles</a>
+                <a class="nav-link btn btn--outline" data-view="business">For Business</a>
+            </nav>
+        </header>
+
+        <main id="view-container">
+            <!-- HOME VIEW -->
+            <div id="home-view" class="view is-active">
+                <div class="main-content-wrapper">
+                    <section class="hero-section view-section">
+                        <img src="https://picsum.photos/1920/1080?grayscale&blur=2" width="1920" height="1080" alt="Serene wellness spa background" class="hero-background">
+                        <div class="hero-content">
+                            <h1>Discover Your Edge. <span>Master Your Biology.</span></h1>
+                            <p>The world's most comprehensive directory and authoritative guide to contrast therapy, saunas, and cold plunges. Find elite facilities or build your own sanctuary.</p>
+                            <div class="hero-cta-group">
+                                <a class="btn btn--primary nav-link" data-view="locations">Find a Location</a>
+                                <a class="btn btn--secondary nav-link" data-view="guides">Read The Guides</a>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <section class="featured-locations view-section">
+                        <div class="container">
+                            <h2 class="section-heading">Featured Partner Studios</h2>
+                            <p class="section-subheading">Explore our network of premier, verified wellness centers dedicated to providing the ultimate contrast therapy experience.</p>
+                            <div class="locations-grid">
+                                <!-- Location Card 1 -->
+                                <div class="location-card" data-view="location-detail">
+                                    <div class="location-card__image-wrapper">
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=1" width="800" height="600" alt="Modern interior of a wellness studio" class="location-card__image">
+                                        <div class="location-card__premium-badge">Premium</div>
+                                    </div>
+                                    <div class="location-card__content">
+                                        <h3 class="location-card__title">The Recovery Hub - Austin</h3>
+                                        <p class="location-card__address">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>
+                                            123 Congress Ave, Austin, TX
+                                        </p>
+                                        <div class="location-card__rating">
+                                            <div class="stars">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                                            </div>
+                                            <span>5.0 (212 reviews)</span>
+                                        </div>
+                                        <div class="btn btn--primary location-card__cta">View Details</div>
+                                    </div>
+                                </div>
+                                <!-- Location Card 2 -->
+                                <div class="location-card" data-view="location-detail">
+                                    <div class="location-card__image-wrapper">
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=2" width="800" height="600" alt="Serene cold plunge pool area" class="location-card__image">
+                                    </div>
+                                    <div class="location-card__content">
+                                        <h3 class="location-card__title">Cryo & Flow - Miami</h3>
+                                        <p class="location-card__address">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>
+                                            450 Ocean Drive, Miami, FL
+                                        </p>
+                                        <div class="location-card__rating">
+                                            <div class="stars">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="m8.854 5.636.923 1.872a.5.5 0 0 0 .378.274l2.067.301-1.496 1.458a.5.5 0 0 0-.144.443l.353 2.059-1.848-.971a.5.5 0 0 0-.468 0l-1.848.971.353-2.059a.5.5 0 0 0-.144-.443L4.23 7.811l2.067-.301a.5.5 0 0 0 .378-.274L7.6 5.364a.5.5 0 0 1 .927.272zM16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3.062l-2.146 1.272a.5.5 0 0 0 .5.866L8 8.438V4.5z"/></svg>
+                                            </div>
+                                            <span>4.9 (189 reviews)</span>
+                                        </div>
+                                        <div class="btn btn--primary location-card__cta">View Details</div>
+                                    </div>
+                                </div>
+                                <!-- Location Card 3 -->
+                                <div class="location-card" data-view="location-detail">
+                                    <div class="location-card__image-wrapper">
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=3" width="800" height="600" alt="Luxurious sauna interior" class="location-card__image">
+                                        <div class="location-card__premium-badge">Premium</div>
+                                    </div>
+                                    <div class="location-card__content">
+                                        <h3 class="location-card__title">Zenith Wellness - Denver</h3>
+                                        <p class="location-card__address">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>
+                                            800 Larimer St, Denver, CO
+                                        </p>
+                                        <div class="location-card__rating">
+                                            <div class="stars">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/></svg>
+                                            </div>
+                                            <span>5.0 (304 reviews)</span>
+                                        </div>
+                                        <div class="btn btn--primary location-card__cta">View Details</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <section class="guide-promo-section view-section">
+                        <div class="container">
+                             <div class="guide-promo-content">
+                                <div class="guide-promo-text">
+                                    <h2 class="section-heading" style="text-align: left;">The Pillar of Knowledge</h2>
+                                    <p>We've built the most comprehensive, science-backed guides to contrast therapy in existence. Go beyond the hype and understand the mechanisms, protocols, and profound benefits. This isn't a blog post; it's a masterclass.</p>
+                                    <ul class="check-list">
+                                        <li>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
+                                            <span>Deep dives into Hormesis, Heat Shock Proteins, and Brown Fat Activation.</span>
+                                        </li>
+                                        <li>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
+                                            <span>Expert-designed protocols for athletic recovery, mental clarity, and longevity.</span>
+                                        </li>
+                                        <li>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>
+                                            <span>Unbiased reviews of at-home equipment for every budget.</span>
+                                        </li>
+                                    </ul>
+                                    <a class="btn btn--primary nav-link" data-view="guides">Explore All Guides</a>
+                                </div>
+                                <div class="guide-promo-image-wrapper">
+                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/1000?random=4" width="800" height="1000" alt="Person reading a book in a calm, focused setting">
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- LOCATIONS VIEW -->
+            <div id="locations-view" class="view">
+                <div class="main-content-wrapper">
+                    <section class="page-header-section view-section">
+                        <div class="container">
+                            <h1 class="section-heading">Find Your Sanctuary</h1>
+                            <p class="section-subheading">Use our comprehensive directory to find the perfect contrast therapy, sauna, or cold plunge facility near you. Filter by amenities, ratings, and services to match your exact needs.</p>
+                            <div class="search-filter-bar">
+                                <div class="search-input-group">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>
+                                    <input type="text" placeholder="Search by City, State, or Studio Name...">
+                                </div>
+                                <select>
+                                    <option value="">All Services</option>
+                                    <option value="contrast">Contrast Therapy</option>
+                                    <option value="sauna">Infrared Sauna</option>
+                                    <option value="cold-plunge">Cold Plunge</option>
+                                    <option value="cryo">Cryotherapy</option>
+                                </select>
+                                <a href="#" class="btn btn--primary">Search</a>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="locations-results-section view-section">
+                        <div class="container">
+                            <div class="locations-results-header">
+                                <h2>Showing 184 studios in 'Worldwide'</h2>
+                                <!-- Sorter could go here -->
+                            </div>
+                            <div class="locations-grid">
+                                <!-- Duplicating featured cards for volume. -->
+                                <div class="location-card" data-view="location-detail">
+                                    <div class="location-card__image-wrapper"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=10" width="800" height="600" alt="Wellness studio interior" class="location-card__image"><div class="location-card__premium-badge">Premium</div></div>
+                                    <div class="location-card__content"><h3 class="location-card__title">The Recovery Hub - Austin</h3><p class="location-card__address"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"></path></svg>123 Congress Ave, Austin, TX</p><div class="location-card__rating"><div class="stars"></div><span>5.0 (212 reviews)</span></div><div class="btn btn--primary location-card__cta">View Details</div></div>
+                                </div>
+                                <div class="location-card" data-view="location-detail">
+                                    <div class="location-card__image-wrapper"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=11" width="800" height="600" alt="Cold plunge pool" class="location-card__image"></div>
+                                    <div class="location-card__content"><h3 class="location-card__title">Arctic Flow - Stockholm</h3><p class="location-card__address"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"></path></svg>Drottninggatan 1, Stockholm, SE</p><div class="location-card__rating"><div class="stars"></div><span>4.9 (189 reviews)</span></div><div class="btn btn--primary location-card__cta">View Details</div></div>
+                                </div>
+                                <div class="location-card" data-view="location-detail">
+                                    <div class="location-card__image-wrapper"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=12" width="800" height="600" alt="Sauna interior" class="location-card__image"><div class="location-card__premium-badge">Premium</div></div>
+                                    <div class="location-card__content"><h3 class="location-card__title">Heatwave Wellness - Sydney</h3><p class="location-card__address"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"></path></svg>500 George St, Sydney, AU</p><div class="location-card__rating"><div class="stars"></div><span>5.0 (304 reviews)</span></div><div class="btn btn--primary location-card__cta">View Details</div></div>
+                                </div>
+                                <div class="location-card" data-view="location-detail">
+                                    <div class="location-card__image-wrapper"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=13" width="800" height="600" alt="Modern spa facility" class="location-card__image"></div>
+                                    <div class="location-card__content"><h3 class="location-card__title">Nomad's Oasis - Bali</h3><p class="location-card__address"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"></path></svg>Jl. Pantai Batu Bolong, Canggu, ID</p><div class="location-card__rating"><div class="stars"></div><span>4.8 (450 reviews)</span></div><div class="btn btn--primary location-card__cta">View Details</div></div>
+                                </div>
+                                <div class="location-card" data-view="location-detail">
+                                    <div class="location-card__image-wrapper"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=14" width="800" height="600" alt="Mountain view from a wellness center" class="location-card__image"><div class="location-card__premium-badge">Premium</div></div>
+                                    <div class="location-card__content"><h3 class="location-card__title">Alpine Reset - Chamonix</h3><p class="location-card__address"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"></path></svg>200 Avenue de l'Aiguille du Midi, Chamonix, FR</p><div class="location-card__rating"><div class="stars"></div><span>5.0 (198 reviews)</span></div><div class="btn btn--primary location-card__cta">View Details</div></div>
+                                </div>
+                                <div class="location-card" data-view="location-detail">
+                                    <div class="location-card__image-wrapper"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=15" width="800" height="600" alt="Urban wellness retreat" class="location-card__image"></div>
+                                    <div class="location-card__content"><h3 class="location-card__title">Metropolis Soothe - Tokyo</h3><p class="location-card__address"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"></path></svg>1-1-2 Oshiage, Sumida City, Tokyo, JP</p><div class="location-card__rating"><div class="stars"></div><span>4.9 (280 reviews)</span></div><div class="btn btn--primary location-card__cta">View Details</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- LOCATION DETAIL VIEW -->
+            <div id="location-detail-view" class="view">
+                 <div class="main-content-wrapper">
+                    <section class="location-detail-header view-section">
+                        <img src="https://picsum.photos/1920/1080?random=1" width="1920" height="1080" alt="The Recovery Hub - Austin interior" class="location-detail-header__background">
+                        <div class="location-detail-header__content">
+                            <h1>The Recovery Hub - Austin</h1>
+                            <div class="location-card__rating">
+                                <div class="stars"> <!-- 5 stars --> </div>
+                                <span>5.0 (212 reviews)</span>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="location-detail-main view-section">
+                        <div class="container">
+                            <div class="location-detail-layout">
+                                <div class="location-detail-content">
+                                    <h2>About The Studio</h2>
+                                    <p>The Recovery Hub is Austin's premier urban sanctuary for those committed to optimizing their health and performance. We believe in the power of deliberate, science-backed protocols to unlock the body's innate potential for resilience. Our state-of-the-art facility provides a serene, supportive environment for you to disconnect from the chaos and reconnect with your biology. Whether you're an elite athlete, a high-performing professional, or simply seeking a profound sense of well-being, our expert staff and top-tier equipment are here to guide your journey.</p>
+                                    <p>Founded by former collegiate athletes who experienced firsthand the transformative effects of contrast therapy, The Recovery Hub was born from a desire to make elite recovery modalities accessible to everyone. We are more than just a facility; we are a community of individuals dedicated to pushing boundaries and living life to the fullest.</p>
+                                    
+                                    <h2>Amenities & Services</h2>
+                                    <div class="amenities-grid">
+                                        <div class="amenity-item">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/></svg>
+                                            <p>Private Changing Rooms</p>
+                                        </div>
+                                        <div class="amenity-item">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 0h3.932a.25.25 0 0 1 .192.41L2.724 9.77a.25.25 0 0 1-.384 0L.372 7.41a.25.25 0 0 1 .192-.41zM8 3a1 1 0 0 1 1 1v2.268l2.121 2.121a1 1 0 0 1-1.414 1.414L8.5 8.414V5a1 1 0 0 1-1-1z"/><path d="M7 2a1 1 0 0 1 1-1h.5a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1h-.5a1 1 0 0 1-1-1V2z"/></svg>
+                                            <p>Infrared Sauna</p>
+                                        </div>
+                                        <div class="amenity-item">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 16a.5.5 0 0 1-.5-.5v-1.293l-.646.647a.5.5 0 0 1-.708-.708l1.5-1.5a.5.5 0 0 1 .708 0l1.5 1.5a.5.5 0 0 1-.708.708L8.5 14.207V15.5a.5.5 0 0 1-.5.5zM8 2a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 1 0v1a.5.5 0 0 1-.5.5zm0 1a.5.5 0 0 1-.5-.5V2a.5.5 0 0 1 1 0v.5a.5.5 0 0 1-.5.5z"/><path d="M10 4.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zM4.5 5a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 1 0v1a.5.5 0 0 1-.5.5zM12 8.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zM2.5 9a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 1 0v1a.5.5 0 0 1-.5.5z"/></svg>
+                                            <p>38°F Cold Plunge</p>
+                                        </div>
+                                         <div class="amenity-item">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>
+                                            <p>Towel Service</p>
+                                        </div>
+                                    </div>
+
+                                    <h2>Photo Gallery</h2>
+                                    <div class="gallery-grid">
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/600/400?random=50" width="600" height="400" alt="Studio interior shot 1">
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/600/400?random=51" width="600" height="400" alt="Studio interior shot 2">
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/600/400?random=52" width="600" height="400" alt="Studio interior shot 3">
+                                    </div>
+                                    
+                                </div>
+                                <aside class="location-detail-sidebar">
+                                    <div class="sidebar-info-item">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>
+                                        <p><strong>Address</strong>123 Congress Ave,<br>Austin, TX 78701</p>
+                                    </div>
+                                    <div class="sidebar-info-item">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/></svg>
+                                        <p><strong>Hours</strong>Mon-Fri: 6am - 9pm<br>Sat-Sun: 8am - 6pm</p>
+                                    </div>
+                                     <div class="sidebar-info-item">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.28 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.28l2.257 1.794a1.745 1.745 0 0 1 .163 2.612l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/></svg>
+                                        <p><strong>Phone</strong>(512) 555-0182</p>
+                                    </div>
+                                    <div class="sidebar-cta-group">
+                                        <a href="#" class="btn btn--primary">Book a Session</a>
+                                        <a href="#" class="btn btn--secondary">Visit Website</a>
+                                    </div>
+                                </aside>
+                            </div>
+                        </div>
+                    </section>
+                 </div>
+            </div>
+
+            <!-- GUIDES LANDING VIEW -->
+            <div id="guides-view" class="view">
+                <div class="main-content-wrapper">
+                     <section class="page-header-section view-section">
+                        <div class="container">
+                            <h1 class="section-heading">Mastery Guides</h1>
+                            <p class="section-subheading">A curated library of comprehensive, science-backed pillars of knowledge. Go beyond the surface-level and become an expert in optimizing your biology.</p>
+                        </div>
+                    </section>
+                    <section class="locations-results-section view-section">
+                        <div class="container">
+                            <div class="guides-grid">
+                                <div class="guide-card" data-view="guide-detail">
+                                    <div class="guide-card__image-wrapper">
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=20" width="800" height="600" alt="Diagram showing cellular response to stress" class="guide-card__image">
+                                    </div>
+                                    <div class="guide-card__content">
+                                        <h3 class="guide-card__title">The Definitive Guide to Contrast Therapy</h3>
+                                        <p class="guide-card__excerpt">The foundational masterclass covering the science of hormesis, thermal stress, and expert-designed protocols for health, performance, and longevity.</p>
+                                        <p class="guide-card__meta">6 Chapters | 25 min read</p>
+                                    </div>
+                                </div>
+                                <div class="guide-card" data-view="guide-detail">
+                                    <div class="guide-card__image-wrapper">
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=21" width="800" height="600" alt="Person meditating by a home sauna" class="guide-card__image">
+                                    </div>
+                                    <div class="guide-card__content">
+                                        <h3 class="guide-card__title">The At-Home Sanctuary Guide</h3>
+                                        <p class="guide-card__excerpt">From budget-friendly DIY setups to luxury installations, this guide provides unbiased reviews and step-by-step plans for building your own wellness space.</p>
+                                        <p class="guide-card__meta">4 Chapters | 18 min read</p>
+                                    </div>
+                                </div>
+                                <div class="guide-card" data-view="guide-detail">
+                                    <div class="guide-card__image-wrapper">
+                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=22" width="800" height="600" alt="Athlete in peak physical condition" class="guide-card__image">
+                                    </div>
+                                    <div class="guide-card__content">
+                                        <h3 class="guide-card__title">The Athlete's Recovery Protocol</h3>
+                                        <p class="guide-card__excerpt">A specialized guide focusing on advanced techniques for accelerating muscle repair, reducing DOMS, and managing inflammation for peak athletic performance.</p>
+                                        <p class="guide-card__meta">5 Chapters | 22 min read</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+
+            <!-- THE GUIDE DETAIL VIEW -->
+            <div id="guide-detail-view" class="view">
+                <div class="main-content-wrapper">
+                     <section class="page-header-section view-section">
+                        <div class="container">
+                            <h1 class="section-heading">The Definitive Guide to Contrast Therapy</h1>
+                            <p class="section-subheading">A comprehensive, science-backed pillar of knowledge covering every facet of thermal stress for optimal health, performance, and longevity. This is your masterclass.</p>
+                        </div>
+                    </section>
+                    <section class="guide-content-section view-section">
+                        <div class="container">
+                            <div class="guide-layout">
+                                <aside class="guide-toc" data-toc-container>
+                                    <h3 class="toc-title">Table of Contents</h3>
+                                    <ul class="toc-list">
+                                        <!-- TOC will be generated here by JS -->
+                                    </ul>
+                                </aside>
+                                <article class="guide-article-content" data-content-container>
+                                    <h2 id="guide-intro">1. Introduction: Beyond The Hype</h2>
+                                    <p>Contrast therapy, the practice of alternating between hot and cold immersion, has surged from the niche circles of elite athletes into the mainstream wellness conversation. But beyond the invigorating shock to the system lies a profound biological conversation, a deliberate application of environmental stress to elicit a cascade of adaptive, strengthening responses within the body. This guide is designed to cut through the noise, providing a foundational understanding of not just the 'what', but the 'why' and 'how' behind this powerful modality. Our goal is to empower you with the knowledge to use thermal stress as a precise tool for enhancing your physical and mental well-being.</p>
+                                    
+                                    <h2 id="guide-science">2. The Science of Hormesis: Stronger Through Stress</h2>
+                                    <p>The entire principle of contrast therapy is built upon a concept called <strong>hormesis</strong>. Hormesis is a biological phenomenon whereby a beneficial effect (e.g., improved health, stress tolerance, growth) results from exposure to low doses of an agent that is otherwise toxic or lethal when given at higher doses. In simple terms: what doesn't kill you makes you stronger.</p>
+                                    <blockquote>The controlled, acute stress from heat and cold acts as a signal to your cells, activating powerful genetic pathways for repair, resilience, and efficiency. It's like taking your cellular machinery to the gym.</blockquote>
+                                    <p>When you plunge into cold water, your body initiates a survival response. Blood vessels constrict (vasoconstriction), shunting blood to your core to protect vital organs. Your brain releases norepinephrine, a key neurotransmitter for focus and mood. Conversely, when you enter a sauna, your blood vessels dilate (vasodilation) to dissipate heat, increasing blood flow to your skin and extremities. Your body releases Heat Shock Proteins (HSPs), which act as molecular chaperones, repairing misfolded proteins and protecting cellular integrity.</p>
+                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/1200/700?random=20" width="1200" height="700" alt="Diagram showing cellular response to stress">
+
+                                    <h2 id="guide-heat">3. The Power of Heat: The Sauna's Embrace</h2>
+                                    <h3>Benefits of Heat Exposure</h3>
+                                    <p>Regular sauna use has been linked in numerous studies to a wide array of health benefits. The primary mechanism is the increase in core body temperature, which mimics some of the effects of moderate exercise. This includes increased heart rate, improved cardiovascular function, and enhanced detoxification through sweating. Critically, the production of Heat Shock Proteins helps combat oxidative stress and inflammation, two key drivers of aging and chronic disease.</p>
+                                    
+                                    <h2 id="guide-cold">4. The Wisdom of Cold: The Plunge's Clarity</h2>
+                                    <h3>Benefits of Cold Immersion</h3>
+                                    <p>Cold exposure is a potent tool for modulating inflammation and boosting mental resilience. The immediate vasoconstriction followed by vasodilation upon rewarming acts as a pump for the lymphatic system, helping to flush metabolic waste from tissues. The significant release of norepinephrine provides an immediate boost in mood, alertness, and focus that can last for hours. Furthermore, regular cold exposure can stimulate the conversion of white adipose tissue (stored fat) into more metabolically active brown adipose tissue (BAT), which burns calories to generate heat.</p>
+
+                                    <h2 id="guide-protocols">5. Protocols & Best Practices</h2>
+                                    <p>While there is no single "perfect" protocol, a common and effective approach is the "1-3-1" method: 1 minute cold, 3 minutes hot, repeated for 3-5 cycles, always ending on cold to prolong the metabolic benefits. It is crucial to listen to your body, stay hydrated, and never push to the point of severe discomfort or shivering. Start slow and gradually increase duration and temperature differentials as your body adapts.</p>
+
+                                    <h2 id="guide-athome">6. Building Your At-Home Sanctuary</h2>
+                                    <p>The ultimate commitment to this practice is creating a space in your own home. This can range from a simple setup using your shower and a chest freezer converted into a cold plunge, to a dedicated room with a high-end infrared sauna and a commercial-grade ice bath. Our upcoming affiliate guides will provide in-depth, unbiased reviews of the best equipment on the market to help you make an informed decision, regardless of your budget or space constraints.</p>
+                                </article>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- ARTICLES VIEW -->
+            <div id="articles-view" class="view">
+                <div class="main-content-wrapper">
+                    <section class="page-header-section view-section">
+                        <div class="container">
+                            <h1 class="section-heading">The Protocol Blog</h1>
+                            <p class="section-subheading">Insights, interviews, and in-depth analysis on the cutting edge of human performance, wellness, and bio-optimization. Your source for actionable intelligence.</p>
+                        </div>
+                    </section>
+                    <section class="articles-content-section view-section">
+                        <div class="container">
+                            <div class="articles-layout">
+                                <main class="articles-main-feed">
+                                    <!-- Article Card 1 -->
+                                    <article class="article-card" data-view="article-detail">
+                                        <div class="article-card__image-wrapper">
+                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/400?random=30" width="800" height="400" alt="Brain synapses firing" class="article-card__image">
+                                        </div>
+                                        <div class="article-card__content">
+                                            <div class="article-card__category">Neuroscience</div>
+                                            <div class="article-card__title">Cold Plunges and The Norepinephrine Flood: More Than Just a Mood Boost</div>
+                                            <p class="article-card__excerpt">We explore the profound impact of cold-induced norepinephrine release on focus, vigilance, and long-term brain health, going beyond the immediate feeling of alertness.</p>
+                                            <div class="article-card__meta">By Dr. Anya Sharma | October 26, 2024</div>
+                                        </div>
+                                    </article>
+                                    <!-- Article Card 2 -->
+                                    <article class="article-card" data-view="article-detail">
+                                        <div class="article-card__image-wrapper">
+                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/400?random=31" width="800" height="400" alt="Person working on a laptop in a modern office" class="article-card__image">
+                                        </div>
+                                        <div class="article-card__content">
+                                            <div class="article-card__category">Business & Franchising</div>
+                                            <div class="article-card__title">The Wellness Gold Rush: Is Opening a Contrast Therapy Studio Your Next Move?</div>
+                                            <p class="article-card__excerpt">An in-depth look at the market trends, startup costs, operational challenges, and potential ROI of entering the booming wellness services industry.</p>
+                                            <div class="article-card__meta">By The Protocol Team | October 22, 2024</div>
+                                        </div>
+                                    </article>
+                                    <!-- Article Card 3 -->
+                                    <article class="article-card" data-view="article-detail">
+                                        <div class="article-card__image-wrapper">
+                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/400?random=32" width="800" height="400" alt="Infrared light spectrum diagram" class="article-card__image">
+                                        </div>
+                                        <div class="article-card__content">
+                                            <div class="article-card__category">Deep Dive</div>
+                                            <div class="article-card__title">Far vs. Near Infrared: Decoding The Sauna Spectrum for Maximum Benefit</div>
+                                            <p class="article-card__excerpt">Not all infrared is created equal. Learn the differences in wavelength penetration and the specific biological effects of each to choose the right sauna technology for you.</p>
+                                            <div class="article-card__meta">By Mark Chen, Bioengineer | October 19, 2024</div>
+                                        </div>
+                                    </article>
+                                </main>
+                                <aside class="articles-sidebar">
+                                    <div class="sidebar-widget">
+                                        <h3 class="sidebar-widget__title">Categories</h3>
+                                        <ul>
+                                            <li><a href="#">Science & Research</a></li>
+                                            <li><a href="#">Protocols & How-To</a></li>
+                                            <li><a href="#">Equipment Reviews</a></li>
+                                            <li><a href="#">Business & Franchising</a></li>
+                                            <li><a href="#">Expert Interviews</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="sidebar-widget">
+                                        <h3 class="sidebar-widget__title">Recommended</h3>
+                                        <ul>
+                                            <li><a href="#">Top 5 At-Home Cold Plunges for 2025</a></li>
+                                            <li><a href="#">An Interview with Dr. Rhonda Patrick on Thermal Stress</a></li>
+                                            <li><a href="#">Can Contrast Therapy Slow Aging? A Look at The Evidence</a></li>
+                                        </ul>
+                                    </div>
+                                </aside>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- ARTICLE DETAIL VIEW -->
+            <div id="article-detail-view" class="view">
+                <div class="main-content-wrapper">
+                    <section class="article-header-section view-section">
+                        <img src="https://picsum.photos/1920/1080?random=30" width="1920" height="1080" alt="Brain synapses firing" class="article-header-background">
+                        <div class="article-header-content">
+                            <div class="article-card__category">Neuroscience</div>
+                            <h1>Cold Plunges and The Norepinephrine Flood: More Than Just a Mood Boost</h1>
+                            <div class="article-meta">By Dr. Anya Sharma | October 26, 2024 | 8 min read</div>
+                        </div>
+                    </section>
+                    <section class="article-body-section view-section">
+                        <div class="container">
+                            <div class="guide-layout">
+                                <aside class="article-toc" data-toc-container>
+                                    <h3 class="toc-title">In This Article</h3>
+                                    <ul class="toc-list">
+                                        <!-- TOC will be generated here by JS -->
+                                    </ul>
+                                </aside>
+                                <article class="article-body-content" data-content-container>
+                                    <p>The bone-deep chill, the racing heart, the involuntary gasp for air—these are the immediate, visceral sensations of a cold plunge. But beneath this surface-level shock, a profound neurochemical event is unfolding. One of the most significant, yet often simplified, benefits of cold water immersion is the massive release of norepinephrine into the bloodstream and brain. While commonly touted as a "mood booster," the implications of this norepinephrine flood extend far deeper, influencing everything from focus and metabolic rate to inflammation and long-term brain health.</p>
+                                    
+                                    <h2 id="article-what-is">What is Norepinephrine?</h2>
+                                    <p>Norepinephrine (also called noradrenaline) is both a hormone and a neurotransmitter. As a hormone, it's released by the adrenal glands into the bloodstream, triggering the "fight or flight" response—increasing heart rate, blood pressure, and mobilizing energy stores. As a neurotransmitter, it's a crucial chemical messenger in the brain regions responsible for attention, focus, sleep-wake cycles, and mood regulation. Think of it as the brain's primary "get ready for action" signal.</p>
+                                    
+                                    <blockquote>Studies have shown that whole-body cold water immersion at 57°F (14°C) for one hour can increase norepinephrine levels by a staggering 530%. Even shorter durations produce significant, albeit less dramatic, spikes.</blockquote>
+                                    
+                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/1200/700?random=40" width="1200" height="700" alt="Graph showing norepinephrine levels spiking during cold exposure">
+                                    
+                                    <h2 id="article-benefits">Beyond The Rush: The Lasting Benefits</h2>
+                                    <h3>1. Enhanced Focus and Vigilance</h3>
+                                    <p>The most immediate effect of the norepinephrine surge is a state of heightened alertness and focus. This is why many people feel incredibly sharp and clear-headed after a cold plunge. The brain is literally primed to pay attention and process information more efficiently. This isn't just a subjective feeling; norepinephrine directly modulates the prefrontal cortex, the area of the brain responsible for executive functions like planning, decision-making, and impulse control.</p>
+                                    
+                                    <h3>2. Potent Anti-inflammatory Action</h3>
+                                    <p>While the cold itself causes vasoconstriction which limits immediate swelling, norepinephrine plays a powerful systemic role in reducing inflammation. It acts on immune cells to inhibit the production of inflammatory cytokines like TNF-alpha, one of the key culprits in many chronic inflammatory conditions. This makes cold therapy a powerful tool not just for acute injury recovery, but for managing systemic, low-grade inflammation.</p>
+                                    
+                                    <h3>3. Building Stress Resilience</h3>
+                                    <p>By voluntarily subjecting your body to the acute stress of the cold, you are essentially training your nervous system. The massive but short-lived spike in norepinephrine helps to "top up" your baseline levels, making your entire system more resilient and less reactive to other daily stressors. It's a classic example of hormesis: a small, controlled dose of stress makes the entire organism stronger and better able to handle future challenges.</p>
+                                    
+                                    <h2 id="article-conclusion">Conclusion</h2>
+                                    <p>In conclusion, the rush you feel from a cold plunge is just the tip of the neurochemical iceberg. The flood of norepinephrine is a powerful biological event that provides a potent cocktail of benefits for your brain and body, offering a compelling case for embracing the cold as a regular practice for anyone looking to optimize their mental and physical performance.</p>
+                                </article>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- FOR BUSINESS VIEW -->
+            <div id="business-view" class="view">
+                <div class="main-content-wrapper">
+                    <section class="page-header-section view-section">
+                        <div class="container">
+                            <h1 class="section-heading">Partner With The Protocol</h1>
+                            <p class="section-subheading">Connect with a dedicated audience of wellness enthusiasts and high-performance individuals. Showcase your facility on the most authoritative contrast therapy platform in the world.</p>
+                        </div>
+                    </section>
+                    <section class="locations-results-section view-section">
+                        <div class="container">
+                            <h2 class="section-heading">Why List With Us?</h2>
+                            <p class="section-subheading">We're not just a directory; we're a destination. Our users are educated, motivated, and actively seeking the exact services you provide. Listing with us puts you directly in their path.</p>
+                            
+                            <div class="pricing-grid">
+                                <div class="pricing-card">
+                                    <h3 class="pricing-card__title">Basic Listing</h3>
+                                    <p class="pricing-card__price">Free <span>/ forever</span></p>
+                                    <p>Get discovered by our audience with a foundational presence on the platform.</p>
+                                    <ul class="check-list">
+                                         <li><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path></svg><span>Appear in search results</span></li>
+                                         <li><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path></svg><span>Display name & address</span></li>
+                                    </ul>
+                                    <a href="#" class="btn btn--secondary nav-link" data-view="contact">Claim Listing</a>
+                                </div>
+                                <div class="pricing-card pricing-card--featured">
+                                    <h3 class="pricing-card__title">Premium Partnership</h3>
+                                    <p class="pricing-card__price">$199 <span>/ month</span></p>
+                                    <p>Maximize your visibility, build trust, and drive bookings with our full suite of features.</p>
+                                     <ul class="check-list">
+                                         <li><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path></svg><span>All Basic features, plus:</span></li>
+                                         <li><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path></svg><span>Priority placement in search</span></li>
+                                         <li><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path></svg><span>Full-detail page with gallery</span></li>
+                                         <li><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path></svg><span>"Book Now" & Website links</span></li>
+                                         <li><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path></svg><span>Featured on homepage</span></li>
+                                    </ul>
+                                    <a href="#" class="btn btn--primary nav-link" data-view="contact">Get Started</a>
+                                </div>
+                                 <div class="pricing-card">
+                                    <h3 class="pricing-card__title">Enterprise</h3>
+                                    <p class="pricing-card__price">Custom <span>/ franchises</span></p>
+                                    <p>Tailored solutions for multi-location businesses and franchises.</p>
+                                    <ul class="check-list">
+                                        <li><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path></svg><span>All Premium features</span></li>
+                                        <li><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path></svg><span>Dedicated account manager</span></li>
+                                        <li><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path></svg><span>Advanced analytics</span></li>
+                                    </ul>
+                                    <a href="#" class="btn btn--secondary nav-link" data-view="contact">Contact Sales</a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- CONTACT VIEW -->
+            <div id="contact-view" class="view">
+                <div class="main-content-wrapper">
+                    <section class="page-header-section view-section">
+                        <div class="container">
+                            <h1 class="section-heading">Get In Touch</h1>
+                            <p class="section-subheading">Have a question, a partnership inquiry, or need to claim your business listing? We're here to help. Fill out the form below and our team will get back to you shortly.</p>
+                        </div>
+                    </section>
+                    <section class="view-section">
+                        <div class="container">
+                             <div class="contact-form-container">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="name">Full Name</label>
+                                        <input type="text" id="name" name="name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email Address</label>
+                                        <input type="email" id="email" name="email" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inquiry">Reason for Inquiry</label>
+                                        <select id="inquiry" name="inquiry">
+                                            <option>General Question</option>
+                                            <option>Claim/Update a Listing</option>
+                                            <option>Premium Partnership</option>
+                                            <option>Press Inquiry</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message">Message</label>
+                                        <textarea id="message" name="message" required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn--primary" style="width: 100%;">Send Message</button>
+                                </form>
+                             </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+        </main>
+        
+        <!-- LAW VII - Footer is a sibling to the view-container initially -->
+        <footer id="site-footer" class="site-footer">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-column footer-about">
+                        <h3 class="footer-column__title logo-container" style="font-size: 1.1rem;">Contrast<span>Protocol</span></h3>
+                        <p>The definitive global resource for the science, practice, and application of contrast therapy. We are dedicated to providing the most authoritative information and the most comprehensive directory of wellness facilities worldwide.</p>
+                        <div class="footer-social-links">
+                            <a href="#" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.884a1.161 1.161 0 1 0 0 2.322 1.161 1.161 0 0 0 0-2.322zM8 4.884a3.116 3.116 0 1 0 0 6.232 3.116 3.116 0 0 0 0-6.232zM8 6.42a1.58 1.58 0 1 1 0 3.16 1.58 1.58 0 0 1 0-3.16z"/></svg></a>
+                            <a href="#" aria-label="X (Twitter)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z"/></svg></a>
+                            <a href="#" aria-label="Facebook"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0 0 3.603 0 8.049c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/></svg></a>
+                        </div>
+                    </div>
+                    <div class="footer-column">
+                        <h3 class="footer-column__title">Explore</h3>
+                        <ul>
+                            <li><a class="nav-link" data-view="locations">Find a Studio</a></li>
+                            <li><a class="nav-link" data-view="guides">Science Guides</a></li>
+                            <li><a class="nav-link" data-view="articles">Blog & Articles</a></li>
+                            <li><a href="#">Equipment Reviews</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h3 class="footer-column__title">For Business</h3>
+                        <ul>
+                            <li><a class="nav-link" data-view="business">List Your Business</a></li>
+                            <li><a class="nav-link" data-view="business">Premium Partnerships</a></li>
+                            <li><a class="nav-link" data-view="contact">Contact Sales</a></li>
+                        </ul>
+                    </div>
+                     <div class="footer-column">
+                        <h3 class="footer-column__title">Company</h3>
+                        <ul>
+                            <li><a href="#">About Us</a></li>
+                            <li><a class="nav-link" data-view="contact">Contact</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; <span id="copyright-year">2024</span> The Contrast Protocol. All Rights Reserved. Built for Absolute Dominion.</p>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+    // Per LAW IV.B.1 (CLARIFICATION PROTOCOL), the script is at the end of the body,
+    // so no DOMContentLoaded wrapper is necessary.
+
+    // -------------------------------------------------------------------------- //
+    //                                 DATA & CONSTANTS                             //
+    // -------------------------------------------------------------------------- //
+    const header = document.getElementById('main-header');
+    const viewContainer = document.getElementById('view-container');
+    const views = document.querySelectorAll('.view');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const siteFooter = document.getElementById('site-footer');
+    
+    // LAW I.A.1-DELTA: Integer-based caching for ResizeObserver
+    let cachedHeaderHeight = 0;
+    
+    // Store IntersectionObserver instances to disconnect them later if needed
+    const tocObservers = new Map();
+
+    // -------------------------------------------------------------------------- //
+    //                               CORE FUNCTIONS & LOGIC                         //
+    // -------------------------------------------------------------------------- //
+
+    /**
+     * Main view switching function.
+     * @param {string} viewId The ID of the view to show.
+     */
+    function showView(viewId) {
+        let targetView = null;
+
+        views.forEach(view => {
+            if (view.id === viewId) {
+                targetView = view;
+                view.classList.add('is-active');
+            } else {
+                view.classList.remove('is-active');
+            }
+        });
+
+        // Update navigation link active states
+        const targetViewName = viewId.replace('-view', '');
+        navLinks.forEach(link => {
+            const linkViewName = link.dataset.view;
+            if (linkViewName === targetViewName || (targetViewName === 'guide-detail' && linkViewName === 'guides')) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+        
+        // LAW VII: DYNAMIC FOOTER INTEGRITY PROTOCOL
+        if (targetView) {
+            const mainContentWrapper = targetView.querySelector('.main-content-wrapper');
+            if (mainContentWrapper && siteFooter) {
+                mainContentWrapper.appendChild(siteFooter);
+            }
+
+            // Scroll the new view to the top
+            targetView.scrollTop = 0;
+
+            // Handle header state based on the new view
+            handleHeaderState(targetView);
+            
+            // Generate Table of Contents if applicable
+            if (targetView.querySelector('[data-toc-container]')) {
+                generateAndHandleTOC(targetView);
+            }
+        }
+
+        // --- START: TRUE PHANTOM LOAD PROTOCOL TRIGGER ---
+        if (targetView) {
+            const imagesToLoad = targetView.querySelectorAll('img[data-src]');
+            imagesToLoad.forEach(img => {
+                if (img.getAttribute('data-src')) {
+                    img.setAttribute('src', img.getAttribute('data-src'));
+                    img.removeAttribute('data-src');
+                }
+            });
+        }
+        // --- END: TRUE PHANTOM LOAD PROTOCOL TRIGGER ---
+    }
+    
+    /**
+     * Generates a Table of Contents for a view and sets up scroll-spying.
+     * @param {HTMLElement} viewElement The view element containing the TOC and content.
+     */
+    function generateAndHandleTOC(viewElement) {
+        const tocContainer = viewElement.querySelector('[data-toc-container] .toc-list');
+        const contentContainer = viewElement.querySelector('[data-content-container]');
+        if (!tocContainer || !contentContainer) return;
+
+        // Clear previous TOC and disconnect old observer
+        tocContainer.innerHTML = '';
+        if (tocObservers.has(viewElement.id)) {
+            tocObservers.get(viewElement.id).disconnect();
+        }
+        
+        const headings = contentContainer.querySelectorAll('h2');
+        if (headings.length === 0) return;
+
+        headings.forEach(heading => {
+            const id = heading.id;
+            const text = heading.textContent;
+            if (id && text) {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = `#${id}`;
+                a.textContent = text;
+                a.onclick = (e) => {
+                    e.preventDefault();
+                    heading.scrollIntoView({ behavior: 'smooth' });
+                };
+                li.appendChild(a);
+                tocContainer.appendChild(li);
+            }
+        });
+
+        // IntersectionObserver for scroll-spying
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                const id = entry.target.getAttribute('id');
+                const link = tocContainer.querySelector(`a[href="#${id}"]`);
+                if (link) {
+                    if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+                         // Remove active from all others before adding
+                        tocContainer.querySelectorAll('a').forEach(a => a.classList.remove('active'));
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                }
+            });
+        }, { 
+            root: viewElement, // Observe within the scrolling view
+            rootMargin: `-${cachedHeaderHeight + 32}px 0px -50% 0px`, // Offset for sticky header
+            threshold: 0.5 
+        });
+
+        headings.forEach(h => observer.observe(h));
+        tocObservers.set(viewElement.id, observer);
+    }
+    
+    /**
+     * Handles header background state based on view and scroll position.
+     * @param {HTMLElement} currentView The currently active view element.
+     */
+    function handleHeaderState(currentView) {
+        if (!currentView) return;
+
+        const isScrolled = () => {
+             header.classList.toggle('is-scrolled', currentView.id !== 'home-view' || currentView.scrollTop > 50);
+        }
+
+        isScrolled(); // Initial check
+        currentView.onscroll = isScrolled;
+    }
+    
+    /**
+     * LAW I.A.1 - Robust Header Height Calculation with ResizeObserver
+     */
+    function observeHeaderHeight() {
+        const observer = new ResizeObserver(entries => {
+            for (let entry of entries) {
+                // LAW I.A.1-DELTA Implementation
+                const newHeight = Math.round(entry.target.offsetHeight);
+                if (newHeight !== cachedHeaderHeight) {
+                    cachedHeaderHeight = newHeight;
+                    document.documentElement.style.setProperty('--header-height', `${newHeight}px`);
+                }
+            }
+        });
+        observer.observe(header);
+    }
+    
+    /**
+     * Initializes the application.
+     */
+    function initApp() {
+        // Initial header height calculation
+        const initialHeight = Math.round(header.offsetHeight);
+        cachedHeaderHeight = initialHeight;
+        document.documentElement.style.setProperty('--header-height', `${initialHeight}px`);
+
+        // Start observing for changes
+        observeHeaderHeight();
+        
+        // Set the copyright year
+        document.getElementById('copyright-year').textContent = new Date().getFullYear();
+        
+        // Initial page load setup
+        const initialView = document.querySelector('.view.is-active');
+        showView(initialView.id); 
+    }
+
+    // -------------------------------------------------------------------------- //
+    //                                EVENT LISTENERS                              //
+    // -------------------------------------------------------------------------- //
+
+    // Navigation click handler
+    viewContainer.addEventListener('click', (event) => {
+        const link = event.target.closest('.nav-link');
+        if (link) {
+            event.preventDefault(); // LAW I.B - Interaction Integrity
+            const viewId = link.dataset.view;
+            if (viewId) {
+                showView(`${viewId}-view`);
+            }
+        }
+    });
+
+    // Delegated click handler for interactive cards
+    viewContainer.addEventListener('click', (event) => {
+        const card = event.target.closest('.location-card, .guide-card, .article-card');
+        if (card) {
+            const viewId = card.dataset.view;
+             if (viewId) {
+                showView(`${viewId}-view`);
+            }
+        }
+    });
+    
+    // Make logo a nav link (outside main container)
+    header.addEventListener('click', (event) => {
+        const link = event.target.closest('.nav-link');
+        if (link) {
+            event.preventDefault();
+            const viewId = link.dataset.view;
+            if (viewId) {
+                showView(`${viewId}-view`);
+            }
+        }
+    });
+    
+    // -------------------------------------------------------------------------- //
+    //                                 INITIALIZATION                               //
+    // -------------------------------------------------------------------------- //
+    initApp();
+
+    </script>
+</body>
+</html>
