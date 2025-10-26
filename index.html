@@ -5,11 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Contrast Protocol - The Definitive Directory & Guide</title>
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap"></noscript>
-
     <style>
         /* -------------------------------------------------------------------------- */
         /*                                 RESET & CORE SETUP                         */
@@ -24,8 +19,9 @@
             --color-text: #B0B5BF;
             --color-text-strong: #F0F2F5;
             --color-success: #28a745;
-            --font-family-heading: 'Montserrat', sans-serif;
-            --font-family-body: 'Lora', serif;
+            /* LAW X - System Font Stack for Absolute Performance */
+            --font-family-heading: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif;
+            --font-family-body: "Iowan Old Style", "Apple Garamond", "Baskerville", "Times New Roman", "Droid Serif", "Times", "Source Serif Pro", serif;
             --header-height: 80px; /* Default, will be updated by JS */
             --base-content-padding: 4rem;
             --container-width: 1240px;
@@ -56,6 +52,10 @@
             line-height: 1.7;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+        }
+        
+        body.mobile-nav-open {
+            overflow: hidden;
         }
 
         /* -------------------------------------------------------------------------- */
@@ -136,6 +136,7 @@
             text-decoration: none;
             letter-spacing: 1px;
             cursor: pointer;
+            z-index: 1002; /* Ensures logo is above mobile nav overlay */
         }
         .logo-container span {
             color: var(--color-accent);
@@ -181,6 +182,94 @@
         .main-nav a.active::after {
             transform: scaleX(1);
             transform-origin: left;
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /*                              MOBILE NAVIGATION                             */
+        /* -------------------------------------------------------------------------- */
+        .mobile-nav-toggle {
+            display: none;
+            width: 30px;
+            height: 24px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            z-index: 1002; /* Above overlay */
+        }
+
+        .mobile-nav-toggle span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background-color: var(--color-white);
+            border-radius: 3px;
+            position: absolute;
+            left: 0;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .mobile-nav-toggle span:nth-child(1) { top: 0; }
+        .mobile-nav-toggle span:nth-child(2) { top: 50%; transform: translateY(-50%); }
+        .mobile-nav-toggle span:nth-child(3) { bottom: 0; }
+        
+        body.mobile-nav-open .mobile-nav-toggle span:nth-child(1) {
+            top: 50%;
+            transform: translateY(-50%) rotate(45deg);
+        }
+        body.mobile-nav-open .mobile-nav-toggle span:nth-child(2) {
+            opacity: 0;
+        }
+        body.mobile-nav-open .mobile-nav-toggle span:nth-child(3) {
+            bottom: 50%;
+            transform: translateY(50%) rotate(-45deg);
+        }
+
+        .mobile-nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(13, 27, 42, 0.95);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 1001; /* Below header items, above page content */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            /* LAW I.C Animated Visibility */
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-20px);
+            transition: opacity var(--transition-med), visibility var(--transition-med), transform var(--transition-med);
+        }
+
+        .mobile-nav-overlay.is-visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .mobile-nav-overlay .nav-link {
+            font-family: var(--font-family-heading);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-light);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+        }
+
+        .mobile-nav-overlay .nav-link.active,
+        .mobile-nav-overlay .nav-link:hover {
+            color: var(--color-accent);
+        }
+        
+        .mobile-nav-overlay .btn {
+            font-size: 1.2rem;
+            padding: 1rem 2.5rem;
         }
 
         /* -------------------------------------------------------------------------- */
@@ -1218,7 +1307,8 @@
         /*                              RESPONSIVE DESIGN                             */
         /* -------------------------------------------------------------------------- */
         @media (max-width: 992px) {
-            .main-nav { display: none; /* Mobile menu would be implemented here */ }
+            .main-nav { display: none; }
+            .mobile-nav-toggle { display: block; }
             .guide-layout, .articles-layout, .location-detail-layout { grid-template-columns: 1fr; }
             .guide-toc, .article-toc, .articles-sidebar, .location-detail-sidebar { position: static; margin-bottom: 3rem; }
             .pricing-grid { grid-template-columns: 1fr; }
@@ -1247,14 +1337,32 @@
                 <a class="nav-link" data-view="articles">Articles</a>
                 <a class="nav-link btn btn--outline" data-view="business">For Business</a>
             </nav>
+            <button class="mobile-nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-nav-overlay">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </header>
+        
+        <div id="mobile-nav-overlay" class="mobile-nav-overlay">
+            <a class="nav-link" data-view="home">Home</a>
+            <a class="nav-link" data-view="locations">Locations</a>
+            <a class="nav-link" data-view="guides">Guides</a>
+            <a class="nav-link" data-view="articles">Articles</a>
+            <a class="nav-link btn btn--outline" data-view="business">For Business</a>
+        </div>
+
 
         <main id="view-container">
             <!-- HOME VIEW -->
             <div id="home-view" class="view is-active">
                 <div class="main-content-wrapper">
                     <section class="hero-section view-section">
-                        <img src="https://picsum.photos/1920/1080?grayscale&blur=2" width="1920" height="1080" alt="Serene wellness spa background" class="hero-background">
+                        <picture>
+                            <source srcset="https://picsum.photos/1920/1080?grayscale&blur=2&format=avif" type="image/avif">
+                            <source srcset="https://picsum.photos/1920/1080?grayscale&blur=2&format=webp" type="image/webp">
+                            <img src="https://picsum.photos/1920/1080?grayscale&blur=2" width="1920" height="1080" alt="Serene wellness spa background" class="hero-background" fetchpriority="high">
+                        </picture>
                         <div class="hero-content">
                             <h1>Discover Your Edge. <span>Master Your Biology.</span></h1>
                             <p>The world's most comprehensive directory and authoritative guide to contrast therapy, saunas, and cold plunges. Find elite facilities or build your own sanctuary.</p>
@@ -1273,8 +1381,7 @@
                                 <!-- Location Card 1 -->
                                 <div class="location-card" data-view="location-detail">
                                     <div class="location-card__image-wrapper">
-                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=1" width="800" height="600" alt="Modern interior of a wellness studio" class="location-card__image">
-                                        <div class="location-card__premium-badge">Premium</div>
+                                        <img loading="lazy" src="https://picsum.photos/800/600?random=1" ...>                                        <div class="location-card__premium-badge">Premium</div>
                                     </div>
                                     <div class="location-card__content">
                                         <h3 class="location-card__title">The Recovery Hub - Austin</h3>
@@ -1298,7 +1405,11 @@
                                 <!-- Location Card 2 -->
                                 <div class="location-card" data-view="location-detail">
                                     <div class="location-card__image-wrapper">
-                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=2" width="800" height="600" alt="Serene cold plunge pool area" class="location-card__image">
+                                        <picture>
+                                            <source srcset="https://picsum.photos/800/600?random=2&format=avif" type="image/avif">
+                                            <source srcset="https://picsum.photos/800/600?random=2&format=webp" type="image/webp">
+                                            <img loading="lazy" src="https://picsum.photos/800/600?random=2" width="800" height="600" alt="Serene cold plunge pool area" class="location-card__image">
+                                        </picture>
                                     </div>
                                     <div class="location-card__content">
                                         <h3 class="location-card__title">Cryo & Flow - Miami</h3>
@@ -1322,7 +1433,11 @@
                                 <!-- Location Card 3 -->
                                 <div class="location-card" data-view="location-detail">
                                     <div class="location-card__image-wrapper">
-                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=3" width="800" height="600" alt="Luxurious sauna interior" class="location-card__image">
+                                        <picture>
+                                            <source srcset="https://picsum.photos/800/600?random=3&format=avif" type="image/avif">
+                                            <source srcset="https://picsum.photos/800/600?random=3&format=webp" type="image/webp">
+                                            <img loading="lazy" src="https://picsum.photos/800/600?random=3" width="800" height="600" alt="Luxurious sauna interior" class="location-card__image">
+                                        </picture>
                                         <div class="location-card__premium-badge">Premium</div>
                                     </div>
                                     <div class="location-card__content">
@@ -1371,7 +1486,11 @@
                                     <a class="btn btn--primary nav-link" data-view="guides">Explore All Guides</a>
                                 </div>
                                 <div class="guide-promo-image-wrapper">
-                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/1000?random=4" width="800" height="1000" alt="Person reading a book in a calm, focused setting">
+                                    <picture>
+                                        <source srcset="https://picsum.photos/800/1000?random=4&format=avif" type="image/avif">
+                                        <source srcset="https://picsum.photos/800/1000?random=4&format=webp" type="image/webp">
+                                        <img loading="lazy" src="https://picsum.photos/800/1000?random=4" width="800" height="1000" alt="Person reading a book in a calm, focused setting">
+                                    </picture>
                                 </div>
                             </div>
                         </div>
@@ -1411,27 +1530,27 @@
                             <div class="locations-grid">
                                 <!-- Duplicating featured cards for volume. -->
                                 <div class="location-card" data-view="location-detail">
-                                    <div class="location-card__image-wrapper"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=10" width="800" height="600" alt="Wellness studio interior" class="location-card__image"><div class="location-card__premium-badge">Premium</div></div>
+                                    <div class="location-card__image-wrapper"><img loading="lazy" src="https://picsum.photos/800/600?random=10" width="800" height="600" alt="Wellness studio interior" class="location-card__image"><div class="location-card__premium-badge">Premium</div></div>
                                     <div class="location-card__content"><h3 class="location-card__title">The Recovery Hub - Austin</h3><p class="location-card__address"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"></path></svg>123 Congress Ave, Austin, TX</p><div class="location-card__rating"><div class="stars"></div><span>5.0 (212 reviews)</span></div><div class="btn btn--primary location-card__cta">View Details</div></div>
                                 </div>
                                 <div class="location-card" data-view="location-detail">
-                                    <div class="location-card__image-wrapper"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=11" width="800" height="600" alt="Cold plunge pool" class="location-card__image"></div>
+                                    <div class="location-card__image-wrapper"><img loading="lazy" src="https://picsum.photos/800/600?random=11" width="800" height="600" alt="Cold plunge pool" class="location-card__image"></div>
                                     <div class="location-card__content"><h3 class="location-card__title">Arctic Flow - Stockholm</h3><p class="location-card__address"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"></path></svg>Drottninggatan 1, Stockholm, SE</p><div class="location-card__rating"><div class="stars"></div><span>4.9 (189 reviews)</span></div><div class="btn btn--primary location-card__cta">View Details</div></div>
                                 </div>
                                 <div class="location-card" data-view="location-detail">
-                                    <div class="location-card__image-wrapper"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=12" width="800" height="600" alt="Sauna interior" class="location-card__image"><div class="location-card__premium-badge">Premium</div></div>
+                                    <div class="location-card__image-wrapper"><img loading="lazy" src="https://picsum.photos/800/600?random=12" width="800" height="600" alt="Sauna interior" class="location-card__image"><div class="location-card__premium-badge">Premium</div></div>
                                     <div class="location-card__content"><h3 class="location-card__title">Heatwave Wellness - Sydney</h3><p class="location-card__address"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"></path></svg>500 George St, Sydney, AU</p><div class="location-card__rating"><div class="stars"></div><span>5.0 (304 reviews)</span></div><div class="btn btn--primary location-card__cta">View Details</div></div>
                                 </div>
                                 <div class="location-card" data-view="location-detail">
-                                    <div class="location-card__image-wrapper"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=13" width="800" height="600" alt="Modern spa facility" class="location-card__image"></div>
+                                    <div class="location-card__image-wrapper"><img loading="lazy" src="https://picsum.photos/800/600?random=13" width="800" height="600" alt="Modern spa facility" class="location-card__image"></div>
                                     <div class="location-card__content"><h3 class="location-card__title">Nomad's Oasis - Bali</h3><p class="location-card__address"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"></path></svg>Jl. Pantai Batu Bolong, Canggu, ID</p><div class="location-card__rating"><div class="stars"></div><span>4.8 (450 reviews)</span></div><div class="btn btn--primary location-card__cta">View Details</div></div>
                                 </div>
                                 <div class="location-card" data-view="location-detail">
-                                    <div class="location-card__image-wrapper"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=14" width="800" height="600" alt="Mountain view from a wellness center" class="location-card__image"><div class="location-card__premium-badge">Premium</div></div>
+                                    <div class="location-card__image-wrapper"><img loading="lazy" src="https://picsum.photos/800/600?random=14" width="800" height="600" alt="Mountain view from a wellness center" class="location-card__image"><div class="location-card__premium-badge">Premium</div></div>
                                     <div class="location-card__content"><h3 class="location-card__title">Alpine Reset - Chamonix</h3><p class="location-card__address"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"></path></svg>200 Avenue de l'Aiguille du Midi, Chamonix, FR</p><div class="location-card__rating"><div class="stars"></div><span>5.0 (198 reviews)</span></div><div class="btn btn--primary location-card__cta">View Details</div></div>
                                 </div>
                                 <div class="location-card" data-view="location-detail">
-                                    <div class="location-card__image-wrapper"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=15" width="800" height="600" alt="Urban wellness retreat" class="location-card__image"></div>
+                                    <div class="location-card__image-wrapper"><img loading="lazy" src="https://picsum.photos/800/600?random=15" width="800" height="600" alt="Urban wellness retreat" class="location-card__image"></div>
                                     <div class="location-card__content"><h3 class="location-card__title">Metropolis Soothe - Tokyo</h3><p class="location-card__address"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"></path></svg>1-1-2 Oshiage, Sumida City, Tokyo, JP</p><div class="location-card__rating"><div class="stars"></div><span>4.9 (280 reviews)</span></div><div class="btn btn--primary location-card__cta">View Details</div></div>
                                 </div>
                             </div>
@@ -1472,7 +1591,7 @@
                                             <p>Infrared Sauna</p>
                                         </div>
                                         <div class="amenity-item">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 16a.5.5 0 0 1-.5-.5v-1.293l-.646.647a.5.5 0 0 1-.708-.708l1.5-1.5a.5.5 0 0 1 .708 0l1.5 1.5a.5.5 0 0 1-.708.708L8.5 14.207V15.5a.5.5 0 0 1-.5.5zM8 2a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 1 0v1a.5.5 0 0 1-.5.5zm0 1a.5.5 0 0 1-.5-.5V2a.5.5 0 0 1 1 0v.5a.5.5 0 0 1-.5.5z"/><path d="M10 4.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zM4.5 5a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 1 0v1a.5.5 0 0 1-.5.5zM12 8.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zM2.5 9a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 1 0v1a.5.5 0 0 1-.5.5z"/></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 16a.5.5 0 0 1-.5-.5v-1.293l-.646.647a.5.5 0 0 1-.708-.708l1.5-1.5a.5.5 0 0 1 .708 0l1.5 1.5a.5.5 0 0 1-.708.708L8.5 14.207V15.5a.5.5 0 0 1-.5-.5zM8 2a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 1 0v1a.5.5 0 0 1-.5.5zm0 1a.5.5 0 0 1-.5-.5V2a.5.5 0 0 1 1 0v.5a.5.5 0 0 1-.5.5z"/><path d="M10 4.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zM4.5 5a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 1 0v1a.5.5 0 0 1-.5-.5zM12 8.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zM2.5 9a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 1 0v1a.5.5 0 0 1-.5-.5z"/></svg>
                                             <p>38°F Cold Plunge</p>
                                         </div>
                                          <div class="amenity-item">
@@ -1483,9 +1602,9 @@
 
                                     <h2>Photo Gallery</h2>
                                     <div class="gallery-grid">
-                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/600/400?random=50" width="600" height="400" alt="Studio interior shot 1">
-                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/600/400?random=51" width="600" height="400" alt="Studio interior shot 2">
-                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/600/400?random=52" width="600" height="400" alt="Studio interior shot 3">
+                                        <img loading="lazy" src="https://picsum.photos/600/400?random=50" width="600" height="400" alt="Studio interior shot 1">
+                                        <img loading="lazy" src="https://picsum.photos/600/400?random=51" width="600" height="400" alt="Studio interior shot 2">
+                                        <img loading="lazy" src="https://picsum.photos/600/400?random=52" width="600" height="400" alt="Studio interior shot 3">
                                     </div>
                                     
                                 </div>
@@ -1527,7 +1646,7 @@
                             <div class="guides-grid">
                                 <div class="guide-card" data-view="guide-detail">
                                     <div class="guide-card__image-wrapper">
-                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=20" width="800" height="600" alt="Diagram showing cellular response to stress" class="guide-card__image">
+                                        <img loading="lazy" src="https://picsum.photos/800/600?random=20" width="800" height="600" alt="Diagram showing cellular response to stress" class="guide-card__image">
                                     </div>
                                     <div class="guide-card__content">
                                         <h3 class="guide-card__title">The Definitive Guide to Contrast Therapy</h3>
@@ -1537,7 +1656,7 @@
                                 </div>
                                 <div class="guide-card" data-view="guide-detail">
                                     <div class="guide-card__image-wrapper">
-                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=21" width="800" height="600" alt="Person meditating by a home sauna" class="guide-card__image">
+                                        <img loading="lazy" src="https://picsum.photos/800/600?random=21" width="800" height="600" alt="Person meditating by a home sauna" class="guide-card__image">
                                     </div>
                                     <div class="guide-card__content">
                                         <h3 class="guide-card__title">The At-Home Sanctuary Guide</h3>
@@ -1547,7 +1666,7 @@
                                 </div>
                                 <div class="guide-card" data-view="guide-detail">
                                     <div class="guide-card__image-wrapper">
-                                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/600?random=22" width="800" height="600" alt="Athlete in peak physical condition" class="guide-card__image">
+                                        <img loading="lazy" src="https://picsum.photos/800/600?random=22" width="800" height="600" alt="Athlete in peak physical condition" class="guide-card__image">
                                     </div>
                                     <div class="guide-card__content">
                                         <h3 class="guide-card__title">The Athlete's Recovery Protocol</h3>
@@ -1588,7 +1707,7 @@
                                     <p>The entire principle of contrast therapy is built upon a concept called <strong>hormesis</strong>. Hormesis is a biological phenomenon whereby a beneficial effect (e.g., improved health, stress tolerance, growth) results from exposure to low doses of an agent that is otherwise toxic or lethal when given at higher doses. In simple terms: what doesn't kill you makes you stronger.</p>
                                     <blockquote>The controlled, acute stress from heat and cold acts as a signal to your cells, activating powerful genetic pathways for repair, resilience, and efficiency. It's like taking your cellular machinery to the gym.</blockquote>
                                     <p>When you plunge into cold water, your body initiates a survival response. Blood vessels constrict (vasoconstriction), shunting blood to your core to protect vital organs. Your brain releases norepinephrine, a key neurotransmitter for focus and mood. Conversely, when you enter a sauna, your blood vessels dilate (vasodilation) to dissipate heat, increasing blood flow to your skin and extremities. Your body releases Heat Shock Proteins (HSPs), which act as molecular chaperones, repairing misfolded proteins and protecting cellular integrity.</p>
-                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/1200/700?random=20" width="1200" height="700" alt="Diagram showing cellular response to stress">
+                                    <img loading="lazy" src="https://picsum.photos/1200/700?random=20" width="1200" height="700" alt="Diagram showing cellular response to stress">
 
                                     <h2 id="guide-heat">3. The Power of Heat: The Sauna's Embrace</h2>
                                     <h3>Benefits of Heat Exposure</h3>
@@ -1626,7 +1745,7 @@
                                     <!-- Article Card 1 -->
                                     <article class="article-card" data-view="article-detail">
                                         <div class="article-card__image-wrapper">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/400?random=30" width="800" height="400" alt="Brain synapses firing" class="article-card__image">
+                                            <img loading="lazy" src="https://picsum.photos/800/400?random=30" width="800" height="400" alt="Brain synapses firing" class="article-card__image">
                                         </div>
                                         <div class="article-card__content">
                                             <div class="article-card__category">Neuroscience</div>
@@ -1638,7 +1757,7 @@
                                     <!-- Article Card 2 -->
                                     <article class="article-card" data-view="article-detail">
                                         <div class="article-card__image-wrapper">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/400?random=31" width="800" height="400" alt="Person working on a laptop in a modern office" class="article-card__image">
+                                            <img loading="lazy" src="https://picsum.photos/800/400?random=31" width="800" height="400" alt="Person working on a laptop in a modern office" class="article-card__image">
                                         </div>
                                         <div class="article-card__content">
                                             <div class="article-card__category">Business & Franchising</div>
@@ -1650,7 +1769,7 @@
                                     <!-- Article Card 3 -->
                                     <article class="article-card" data-view="article-detail">
                                         <div class="article-card__image-wrapper">
-                                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/800/400?random=32" width="800" height="400" alt="Infrared light spectrum diagram" class="article-card__image">
+                                            <img loading="lazy" src="https://picsum.photos/800/400?random=32" width="800" height="400" alt="Infrared light spectrum diagram" class="article-card__image">
                                         </div>
                                         <div class="article-card__content">
                                             <div class="article-card__category">Deep Dive</div>
@@ -1714,7 +1833,7 @@
                                     
                                     <blockquote>Studies have shown that whole-body cold water immersion at 57°F (14°C) for one hour can increase norepinephrine levels by a staggering 530%. Even shorter durations produce significant, albeit less dramatic, spikes.</blockquote>
                                     
-                                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://picsum.photos/1200/700?random=40" width="1200" height="700" alt="Graph showing norepinephrine levels spiking during cold exposure">
+                                    <img loading="lazy" src="https://picsum.photos/1200/700?random=40" width="1200" height="700" alt="Graph showing norepinephrine levels spiking during cold exposure">
                                     
                                     <h2 id="article-benefits">Beyond The Rush: The Lasting Benefits</h2>
                                     <h3>1. Enhanced Focus and Vigilance</h3>
@@ -1894,6 +2013,8 @@
     const views = document.querySelectorAll('.view');
     const navLinks = document.querySelectorAll('.nav-link');
     const siteFooter = document.getElementById('site-footer');
+    const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+    const mobileNavOverlay = document.querySelector('.mobile-nav-overlay');
     
     // LAW I.A.1-DELTA: Integer-based caching for ResizeObserver
     let cachedHeaderHeight = 0;
@@ -1921,11 +2042,16 @@
             }
         });
 
-        // Update navigation link active states
+        // Update navigation link active states (for both desktop and mobile)
         const targetViewName = viewId.replace('-view', '');
         navLinks.forEach(link => {
             const linkViewName = link.dataset.view;
-            if (linkViewName === targetViewName || (targetViewName === 'guide-detail' && linkViewName === 'guides')) {
+            if (linkViewName === targetViewName || 
+               (targetViewName === 'guide-detail' && linkViewName === 'guides') ||
+               (targetViewName === 'article-detail' && linkViewName === 'articles') ||
+               (targetViewName === 'location-detail' && linkViewName === 'locations') ||
+               (targetViewName === 'contact' && linkViewName === 'business')
+            ){
                 link.classList.add('active');
             } else {
                 link.classList.remove('active');
@@ -1952,16 +2078,18 @@
         }
 
         // --- START: TRUE PHANTOM LOAD PROTOCOL TRIGGER ---
-        if (targetView) {
-            const imagesToLoad = targetView.querySelectorAll('img[data-src]');
-            imagesToLoad.forEach(img => {
-                if (img.getAttribute('data-src')) {
-                    img.setAttribute('src', img.getAttribute('data-src'));
-                    img.removeAttribute('data-src');
-                }
-            });
-        }
+        // Native lazy loading is now handled by the browser automatically
+        // No additional JavaScript intervention needed
         // --- END: TRUE PHANTOM LOAD PROTOCOL TRIGGER ---
+    }
+    
+    /**
+     * Toggles the mobile navigation menu.
+     */
+    function toggleMobileNav() {
+        const isNavOpen = document.body.classList.toggle('mobile-nav-open');
+        mobileNavOverlay.classList.toggle('is-visible');
+        mobileNavToggle.setAttribute('aria-expanded', isNavOpen);
     }
     
     /**
@@ -2080,37 +2208,40 @@
     //                                EVENT LISTENERS                              //
     // -------------------------------------------------------------------------- //
 
-    // Navigation click handler
-    viewContainer.addEventListener('click', (event) => {
+    // Navigation click handler (delegated for desktop nav, cards, etc.)
+    document.body.addEventListener('click', (event) => {
         const link = event.target.closest('.nav-link');
-        if (link) {
+        const card = event.target.closest('.location-card, .guide-card, .article-card');
+
+        let targetElement = null;
+        if(link && !mobileNavOverlay.contains(link)) { // Desktop link
+             targetElement = link;
+        } else if (card) { // Any interactive card
+             targetElement = card;
+        }
+
+        if (targetElement) {
             event.preventDefault(); // LAW I.B - Interaction Integrity
-            const viewId = link.dataset.view;
+            const viewId = targetElement.dataset.view;
             if (viewId) {
                 showView(`${viewId}-view`);
             }
         }
     });
-
-    // Delegated click handler for interactive cards
-    viewContainer.addEventListener('click', (event) => {
-        const card = event.target.closest('.location-card, .guide-card, .article-card');
-        if (card) {
-            const viewId = card.dataset.view;
-             if (viewId) {
-                showView(`${viewId}-view`);
-            }
-        }
-    });
     
-    // Make logo a nav link (outside main container)
-    header.addEventListener('click', (event) => {
+    // Mobile Navigation Toggle
+    mobileNavToggle.addEventListener('click', toggleMobileNav);
+
+    // Mobile Navigation Links
+    mobileNavOverlay.addEventListener('click', (event) => {
         const link = event.target.closest('.nav-link');
         if (link) {
             event.preventDefault();
             const viewId = link.dataset.view;
             if (viewId) {
                 showView(`${viewId}-view`);
+                // Close the menu after navigation
+                toggleMobileNav();
             }
         }
     });
